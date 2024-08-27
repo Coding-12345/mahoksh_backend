@@ -18,58 +18,59 @@ import formidable from "express-formidable";
 
 const router = express.Router();
 
-//routes
+// Create Product Route
 router.post(
   "/create-product",
   requireSignIn,
   isAdmin,
-  formidable(),
+  formidable(), 
   createProductController
 );
-//routes
+
+// Update Product Route
 router.put(
   "/update-product/:pid",
   requireSignIn,
   isAdmin,
-  formidable(),
+  formidable(), 
   updateProductController
 );
 
-//get products
+// Get All Products
 router.get("/get-product", getProductController);
 
-//single product
+// Get Single Product by Slug
 router.get("/get-product/:slug", getSingleProductController);
 
-//get photo
+// Get Product Photo
 router.get("/product-photo/:pid", productPhotoController);
 
-//delete rproduct
+// Delete Product
 router.delete("/delete-product/:pid", deleteProductController);
 
-//filter product
+// Filter Products
 router.post("/product-filters", productFiltersController);
 
-//product count
+// Get Product Count
 router.get("/product-count", productCountController);
 
-//product per page
+// Get Products by Page
 router.get("/product-list/:page", productListController);
 
-//search product
+// Search Products
 router.get("/search/:keyword", searchProductController);
 
-//similar product
+// Get Related Products
 router.get("/related-product/:pid/:cid", realtedProductController);
 
-//category wise product
+// Get Products by Category
 router.get("/product-category/:slug", productCategoryController);
 
-//payments routes
-// //token
+// Payment Routes
+// // Token
 // router.get("/braintree/token", braintreeTokenController);
 
-// //payments
+// // Payment
 // router.post("/braintree/payment", requireSignIn, brainTreePaymentController);
 
 export default router;

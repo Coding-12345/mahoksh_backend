@@ -4,6 +4,7 @@ import orderModel from "../models/orderModel.js";
 
 import fs from "fs";
 import slugify from "slugify";
+
 // import braintree from "braintree";
 // import dotenv from "dotenv";
 
@@ -19,7 +20,7 @@ import slugify from "slugify";
 
 export const createProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity, shipping } =
+    const { name, description, price, discount, category, quantity, shipping } =
       req.fields;
     const { photo } = req.files;
     //alidation
@@ -30,6 +31,10 @@ export const createProductController = async (req, res) => {
         return res.status(500).send({ error: "Description is Required" });
       case !price:
         return res.status(500).send({ error: "Price is Required" });
+      case discount < 0 || discount > 100:
+        return res
+          .status(500)
+          .send({ error: "Discount should be between 0 and 100" });
       case !category:
         return res.status(500).send({ error: "Category is Required" });
       case !quantity:
@@ -73,14 +78,14 @@ export const getProductController = async (req, res) => {
     res.status(200).send({
       success: true,
       counTotal: products.length,
-      message: "ALlProducts ",
+      message: "AllProducts ",
       products,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Erorr in getting products",
+      message: "Error in getting products",
       error: error.message,
     });
   }
@@ -101,7 +106,7 @@ export const getSingleProductController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Eror while getitng single product",
+      message: "Error while getitng single product",
       error,
     });
   }
@@ -119,7 +124,7 @@ export const productPhotoController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Erorr while getting photo",
+      message: "Error while getting photo",
       error,
     });
   }
@@ -146,7 +151,7 @@ export const deleteProductController = async (req, res) => {
 //upate producta
 export const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity, shipping } =
+    const { name, description, price, discount, category, quantity, shipping } =
       req.fields;
     const { photo } = req.files;
     //alidation
@@ -157,6 +162,10 @@ export const updateProductController = async (req, res) => {
         return res.status(500).send({ error: "Description is Required" });
       case !price:
         return res.status(500).send({ error: "Price is Required" });
+      case discount < 0 || discount > 100:
+        return res
+          .status(500)
+          .send({ error: "Discount should be between 0 and 100" });
       case !category:
         return res.status(500).send({ error: "Category is Required" });
       case !quantity:
@@ -208,7 +217,7 @@ export const productFiltersController = async (req, res) => {
     console.log(error);
     res.status(400).send({
       success: false,
-      message: "Error WHile Filtering Products",
+      message: "Error While Filtering Products",
       error,
     });
   }
