@@ -21,7 +21,7 @@ import slugify from "slugify";
 export const createProductController = async (req, res) => {
   try {
     const { name, description, price, discount, category, quantity, shipping } =
-      req.fields;
+      req.body;
     const { photo } = req.files;
     //alidation
     switch (true) {
@@ -45,7 +45,7 @@ export const createProductController = async (req, res) => {
           .send({ error: "photo is Required and should be less then 1mb" });
     }
 
-    const products = new productModel({ ...req.fields, slug: slugify(name) });
+    const products = new productModel({ ...req.body, slug: slugify(name) });
     if (photo) {
       products.photo.data = fs.readFileSync(photo.path);
       products.photo.contentType = photo.type;
@@ -151,8 +151,9 @@ export const deleteProductController = async (req, res) => {
 //upate producta
 export const updateProductController = async (req, res) => {
   try {
+    console.log(req.body);
     const { name, description, price, discount, category, quantity, shipping } =
-      req.fields;
+      req.body;
     const { photo } = req.files;
     //alidation
     switch (true) {
@@ -178,7 +179,7 @@ export const updateProductController = async (req, res) => {
 
     const products = await productModel.findByIdAndUpdate(
       req.params.pid,
-      { ...req.fields, slug: slugify(name) },
+      { ...req.body, slug: slugify(name) },
       { new: true }
     );
     if (photo) {
